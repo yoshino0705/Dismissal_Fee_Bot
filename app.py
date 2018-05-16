@@ -12,6 +12,8 @@ from linebot.models import *
 
 import requests
 
+import Decode
+
 app = Flask(__name__)
 
 line_bot_api = LineBotApi(os.environ['Channel_Access_Token'])
@@ -38,9 +40,11 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     print(event)
+    decoded_plans = Decode(event.message.text)
+    plans_text = '\n'.join([k for k in decoded_plans.plans.keys()])
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text))
+        TextSendMessage(text=plans_text))
 
 if __name__ == "__main__":
     app.run()
