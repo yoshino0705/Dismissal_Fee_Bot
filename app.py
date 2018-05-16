@@ -43,7 +43,7 @@ def handle_message(event):
     decoded_plans = Decode(event.message.text)
     plans_text = '\n'.join([k for k in decoded_plans.plans.keys()])    
     if not plans_text:
-        plans_text = '無此方案或未提電信名'
+        plans_text = '無此方案或未提電信名，或關鍵詞中間無空格，例如: " 中499 " 應為 " 中 499 "'
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=plans_text))
