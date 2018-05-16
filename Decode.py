@@ -1,3 +1,5 @@
+import ast
+
 class Decode(object):
     def __init__(self, keywords, title_file='title.txt'):
         self._titles = ast.literal_eval(open(title_file, encoding="utf8").read())
