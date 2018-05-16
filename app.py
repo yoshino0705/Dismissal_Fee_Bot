@@ -13,6 +13,7 @@ from linebot.models import *
 import requests
 
 from Decode import Decode
+from Contract import Contract
 
 app = Flask(__name__)
 
