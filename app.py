@@ -12,7 +12,7 @@ from linebot.models import *
 
 import requests
 
-import Decode
+from Decode import Decode
 
 app = Flask(__name__)
 
