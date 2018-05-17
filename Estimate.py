@@ -5,17 +5,19 @@ class Estimate(object):
         self._rent = plan['rent']
         self._subsidy = plan['subsidy']
         self._discount = plan['discount']
-        self._start = self.parse_start_time(start_date)
-        self._end = self.parse_end_time(end_date)
+        self._start = Estimate.parse_start_time(start_date)
+        self._end = Estimate.parse_end_time(end_date)
         
-    def parse_start_time(self, start_date):
+    @staticmethod
+    def parse_start_time(start_date):
         try:
             return datetime.datetime.strptime(start_date, '%Y/%m/%d')
         except ValueError:
             print("Invalid date format", start_date)
             return None
         
-    def parse_end_time(self, end_date):
+    @staticmethod
+    def parse_end_time(end_date):
         try:
             return datetime.datetime.strptime(end_date, '%Y/%m/%d')
         except ValueError:
