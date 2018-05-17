@@ -1,6 +1,6 @@
 import psycopg2
 
-db_conn = psycopg2.connect(uri)
+db_conn = psycopg2.connect(os.environ['DATABASE_URL'])
 cur = db_conn.cursor()
 
 class Access_Info(object):
