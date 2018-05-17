@@ -1,3 +1,9 @@
+import psycopg2
+import os
+
+db_conn = psycopg2.connect(os..environ['DATABASE_URL'])
+cur = db_conn.cursor()
+
 class Access_Info(object):
     def __init__(self, identifier):
         self._identifier = str(identifier)
