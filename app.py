@@ -51,7 +51,7 @@ def handle_message(event):
     sw = Switcher(ai_con, event.message.text)
     text = sw.execute()
     
-    #line_bot_api.reply_message(event.reply_token, TextSendMessage(text=text))
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=text))
 
 if __name__ == "__main__":
     app.run()
