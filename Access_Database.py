@@ -1,7 +1,6 @@
 import psycopg2
-import os
 
-db_conn = psycopg2.connect(os..environ['DATABASE_URL'])
+db_conn = psycopg2.connect(uri)
 cur = db_conn.cursor()
 
 class Access_Info(object):
@@ -38,6 +37,7 @@ class Access_Info(object):
             db_conn.commit()
             self._update_row_values()        
             self._update_identifier_list()
+            print("delete success")
             
     def create_info(self):
         if self._identifier not in self._existing_identifier_list:
