@@ -1,30 +1,36 @@
-import ast
-
+import datetime
 class Estimate(object):
-    def __init__(self, title_file='title.txt', contract_file='contract.csv'):
-        self.titles = ast.literal_eval(open(title_file, encoding="utf8").read())
-        self.telecoms = set([d['telecom'] for d in self.titles]) # set of all possible telecoms
-        self.plans = [d['plan'] for d in self.titles] # list of possible plans from the telecoms
-        self.telecom_candidates = [] # telecom candidates based on given keywords
-        self.plan_candidates = [] # plan candidates based on given keywords
+    def __init__(self, plan, start_date, end_date):
+        self._length = plan['length']
+        self._rent = plan['rent']
+        self._subsidy = plan['subsidy']
+        self._discount = plan['discount']
+        self._start = self.parse_start_time(start_date)
+        self._end = self.parse_end_time(end_date)
         
-    def find_telecom_candidates(self, term):
-        if not term:
-            return False
-        l = [t for t in self.telecoms if term in t]
-        self.telecom_candidates = l
-        self.plans = [d['plan'] for d in self.titles if d['telecom'] in l]
-        return True if l else False
-    
-    def find_plan_candidates(self, term):
-        if not term:
-            return False
-        l = [p for p in self.plans if term in p]
-        self.plan_candidates = l
-        return True if l else False
+    def parse_start_time(self, start_date):
+        try:
+            return datetime.datetime.strptime(start_date, '%Y/%m/%d')
+        except ValueError:
+            print("Invalid date format", start_date)
+            return None
         
-if __name__ == '__main__':
-    est = Estimate()
-    est.find_telecom_candidates('中華')
-    est.find_plan_candidates('4G')
-    est.plan_candidates
+    def parse_end_time(self, end_date):
+        try:
+            return datetime.datetime.strptime(end_date, '%Y/%m/%d')
+        except ValueError:
+            print("Invalid date format", end_date, ". Will use current date instead.")
+            return datetime.datetime.now()
+        
+    def evaluate(self):
+        days_passed = (self._end - self._start).days
+        if days_passed < 0:
+            print("starting date is greater than ending date")
+            return -1
+        contract_days = (self._length / 24) * 365
+        days_left = contract_days - days_passed
+        penalty = ((self._discount / 30) * days_passed)
+        penalty += self._subsidy
+        penalty *= (days_left / contract_days)
+        return round(penalty)
+        
