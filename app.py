@@ -12,9 +12,7 @@ from linebot.models import *
 
 import requests
 
-from Decode import Decode
-from Contract import Contract
-from Estimate import Estimate
+from Switcher import Switcher
 from Access_Database import Access_Info
 
 app = Flask(__name__)
@@ -49,29 +47,13 @@ def handle_message(event):
         r_id = event.source.user_id
         
     ai_con = Access_Info(r_id)
-    
-    
-    text, success = generate_plans_list(event.message.text)
+    ai_con.create_info()
+    sw = Switcher(ai_con, event.message.text)
+    text = sw.execute()
     
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=text))
-    
-def generate_plans_list(msg_text):
-    decoded_plans = Decode(msg_text)    
-    success = False
-    
-    if not decoded_plans.plans:
-        plans_text = '無此方案或未提電信名，或關鍵詞中間無空格，例如: " 中699 " 應為 " 中 699 "'
-        success = False
-    else:
-        plans_text = '請選擇一個方案: (輸入數字)\n'
-        index = 0
-        for k in decoded_plans.plans.keys():
-            plans_text += '{}) {}\n'.format(index, k)
-            index += 1
-        success = True
-    return plans_text, success
 
 if __name__ == "__main__":
     app.run()
