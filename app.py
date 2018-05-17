@@ -41,13 +41,24 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     print(event)
-    decoded_plans = Decode(event.message.text)
-    plans_text = '\n'.join([k for k in decoded_plans.plans.keys()])    
-    if not plans_text:
-        plans_text = '無此方案或未提電信名，或關鍵詞中間無空格，例如: " 中699 " 應為 " 中 699 "'
+    text = generate_plans_list(event.message.text)
+    
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=plans_text))
+        TextSendMessage(text=text))
+    
+def generate_plans_list(msg_text):
+    decoded_plans = Decode(msg_text)    
+    
+    if not decoded_plans.plans:
+        plans_text = '無此方案或未提電信名，或關鍵詞中間無空格，例如: " 中699 " 應為 " 中 699 "'
+    else:
+        plans_text = '請選擇一個方案: (輸入數字)\n'
+        index = 0
+        for k in decoded_plans.plans.keys():
+            plans_text += '{}) {}\n'.format(index, k)
+            index += 1
+    return plans_text
 
 if __name__ == "__main__":
     app.run()
