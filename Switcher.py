@@ -117,4 +117,4 @@ class Switcher(object):
                 return "門號解約日期不得大於合約到期日"
             else:
                 self._con.set_status(-1) # evaluation complete, reset status
-                return "違約金約為 ${}".format()
+                return "違約金約為 ${}".format(penalty)
