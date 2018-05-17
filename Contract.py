@@ -5,7 +5,7 @@ class Contract(object):
         self._code = plan_code
         self._df = pd.read_csv(contract_file, header=0, sep='\t')
         self._df_plan_code = self._df[self._df['title'] == self._code]
-        self._df_rows = [r for i,r in est.df_plan_code.iterrows()]
+        self._df_rows = [r for i,r in self._df_plan_code.iterrows()]
         
     def get_plan_list(self):
         s = '請選擇以下方案\n'
