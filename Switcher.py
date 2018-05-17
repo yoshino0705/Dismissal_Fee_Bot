@@ -110,5 +110,11 @@ class Switcher(object):
             dpi = self._con.get_detailed_plan_id()
             plan = Contract(tpi).get_plan_by_index(dpi)
             est = Estimate(plan, start_str, end_str)
-            self._con.set_status(-1) # evaluation complete, status reset
-            return "違約金約為 ${}".format(est.evaluate())
+            penalty = est.evaluate()
+            if penalty < 0:
+                print("contract days < days passed")
+                self._con.set_status(4)
+                return "門號解約日期不得大於合約到期日"
+            else:
+                self._con.set_status(-1) # evaluation complete, reset status
+                return "違約金約為 ${}".format()
