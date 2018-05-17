@@ -1,15 +1,9 @@
-import psycopg2
-import os
-
-db_conn = psycopg2.connect(os..environ['DATABASE_URL'])
-cur = db_conn.cursor()
-
 class Access_Info(object):
     def __init__(self, identifier):
         self._identifier = str(identifier)
         self._insert_query = '''
-        INSERT INTO "Info"(room_id, tele_plan_id, detailed_plan_id, start_date, end_date, status)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        INSERT INTO "Info"(room_id, tele_plan_id, detailed_plan_id, start_date, end_date, status, keywords)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         '''      
         self._delete_query = '''DELETE FROM "Info" WHERE room_id = %s'''
         
@@ -21,6 +15,7 @@ class Access_Info(object):
         self._start_date_pos = 4
         self._end_date_pos = 5
         self._status_pos = 6
+        self._keywords_pos = 7
         
     def _update_row_values(self):
         cur.execute('''SELECT * FROM "Info" WHERE room_id = %s''', (self._identifier,))
@@ -41,7 +36,7 @@ class Access_Info(object):
     def create_info(self):
         if self._identifier not in self._existing_identifier_list:
             try:
-                cur.execute(self._insert_query, (self._identifier, -1, -1, "", "", 0))
+                cur.execute(self._insert_query, (self._identifier, -1, -1, "", "", 0, ""))
                 db_conn.commit()
                 self._update_row_values()
                 self._update_identifier_list()
@@ -109,3 +104,17 @@ class Access_Info(object):
             cur.execute('''UPDATE "Info" SET "status" = %s WHERE room_id = %s''', (status, self._identifier, ))
             db_conn.commit()
             self._update_row_values()
+            
+    def get_keywords(self):
+        if self._values:
+            return self._values[0][self._keywords_pos]
+        else:
+            return ""
+        
+    def set_keywords(self, keywords):
+        if self._values:
+            cur.execute('''UPDATE "Info" SET "keywords" = %s WHERE room_id = %s''', (keywords, self._identifier, ))
+            db_conn.commit()
+            self._update_row_values()
+    def get_values(self):
+        return self._values
