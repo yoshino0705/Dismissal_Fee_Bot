@@ -1,6 +1,7 @@
 # Dismissal_Fee_Bot
 
 A LINE bot dedicated to caculating the dismissal fee of Taiwanese Telecoms
+
 The bot only chats in Chinese for now
 
 Uses Heroku Server and LINE API
