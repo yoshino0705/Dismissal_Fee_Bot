@@ -29,7 +29,7 @@ class Estimate(object):
         if days_passed < 0:
             print("starting date is greater than ending date")
             return -1
-        contract_days = (self._length / 24) * 365
+        contract_days = (self._length / 12) * 365
         days_left = contract_days - days_passed
         penalty = ((self._discount / 30) * days_passed)
         penalty += self._subsidy
