@@ -1,10 +1,9 @@
 import ast
-
 class Decode(object):
     def __init__(self, keywords, title_file='title.txt'):
         self._titles = ast.literal_eval(open(title_file, encoding="utf8").read())
         self._telecoms = set([d['telecom'] for d in self._titles]) # set of all possible telecoms
-        self._plans = {(_d['telecom']+_d['plan']) : _i for _d,_i in zip(self._titles, range(len(self._titles)))}
+        self._plans = {' '.join([_d['telecom'], _d['plan']]) : _i for _d,_i in zip(self._titles, range(len(self._titles)))}
         self._terms = keywords.split()
         
         self.telecoms = self._get_telecoms()
