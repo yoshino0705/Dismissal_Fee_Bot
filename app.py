@@ -17,8 +17,8 @@ from Access_Database import Access_Info
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi(os.environ['Channel_Access_Token2'])
-handler = WebhookHandler(os.environ['Channel_Secret2'])
+line_bot_api = LineBotApi(os.environ['Channel_Access_Token'])
+handler = WebhookHandler(os.environ['Channel_Secret'])
     
 @app.route("/callback", methods=['POST'])
 def callback():
